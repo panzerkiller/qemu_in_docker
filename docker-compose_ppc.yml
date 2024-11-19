@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  qemu-ppc:
+    build:
+      context: .  # Build the image from the Dockerfile in the current directory
+    container_name: qemu_system_ppc
+    privileged: true  # Required for QEMU to emulate hardware
+    volumes:
+      - ./data:/data  # Mount local data directory for disk images
+    entrypoint:
+    - qemu-system-ppc
+    - -M
+    - mac99
+    - -cpu
+    - G4
+    - -m
+    - "512"
+    - -vga
+    - std
+    - -drive
+    - file=disk.img,format=qcow2,if=ide
+    - -cdrom
+    - /data/MacOSX.4.iso
+    - -boot
+    - d
+    - -bios
+    - /data/openbios-ppc
+    - -usb
+    - -netdev
+    #- user,id=mynet0,hostfwd=tcp::5900-:5900
+    - tap,id=mynet0,ifname=tap0,script=no,downscript=no
+    - -device
+    - usb-net,netdev=mynet0
+    - -vnc
+    - :0,password=off
+    ports:
+      - "5905:5900"  # Expose VNC port to the host
+    stdin_open: true
+    tty: true
