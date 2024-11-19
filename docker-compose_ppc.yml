@@ -19,11 +19,11 @@ services:
     - -vga
     - std
     - -drive
-    - file=disk.img,format=qcow2,if=ide
+    - file=/data/osx-tiger_10.4.11_installed.qcow2,format=qcow2,if=ide
     - -cdrom
     - /data/MacOSX.4.iso
     - -boot
-    - d
+    - c
     - -bios
     - /data/openbios-ppc
     - -usb
